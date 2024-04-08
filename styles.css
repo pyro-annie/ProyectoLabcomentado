@@ -1,0 +1,131 @@
+/* Importamos la fuente 'Roboto' de Google Fonts para usarla en la página. */
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+/* Estilizamos la página de inicio de sesión con un ancho fijo y centrado en la pantalla. */
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+
+/* Estilizamos el formulario con un fondo semitransparente, sombra para darle profundidad y bordes redondeados. */
+.form {
+  position: relative;
+  z-index: 1;
+  background: #00000079; /* Color de fondo negro con opacidad */
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 30%;
+}
+
+/* Estilizamos los campos de entrada del formulario para que tengan un fondo claro y sin bordes. */
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* Estilizamos el botón del formulario con un color de fondo, transiciones suaves y un puntero de cursor. */
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #130281; /* Color de fondo azul oscuro */
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF; /* Color de texto blanco */
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+/* Cambiamos el color de fondo del botón cuando se interactúa con él (hover, active, focus). */
+.form button:hover,.form button:active,.form button:focus {
+  background: #02054fb5; /* Color de fondo más claro al interactuar */
+}
+
+/* Estilizamos el mensaje dentro del formulario, como un mensaje de error o información. */
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3; /* Color de texto gris claro */
+  font-size: 12px;
+}
+
+/* Estilizamos los enlaces dentro del mensaje del formulario. */
+.form .message a {
+  color: #7a74e2; /* Color de texto morado claro */
+  text-decoration: none; /* Sin subrayado en el enlace */
+}
+
+/* Ocultamos el formulario de registro por defecto. */
+.form .register-form {
+  display: none;
+}
+
+/* Estilizamos el contenedor para centrarlo y darle un ancho máximo. */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Limpiamos los flotantes antes y después del contenedor. */
+.container:before, .container:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* Estilizamos la información dentro del contenedor, como títulos y textos. */
+.container .info {
+  margin: 50px auto;
+  text-align: center;
+}
+
+/* Estilizamos el título dentro de la información del contenedor. */
+.container .info h1 {
+  margin: 0 0 15px;
+  padding: 0;
+  font-size: 36px;
+  font-weight: 300; /* Peso de la fuente ligero */
+  color: #1a1a1a; /* Color de texto casi negro */
+}
+
+/* Estilizamos el texto adicional dentro de la información del contenedor. */
+.container .info span {
+  color: #4d4d4d; /* Color de texto gris oscuro */
+  font-size: 12px;
+}
+
+/* Estilizamos los enlaces dentro del texto adicional de la información del contenedor. */
+.container .info span a {
+  color: #000000; /* Color de texto negro */
+  text-decoration: none; /* Sin subrayado en el enlace */
+}
+
+/* Estilizamos el icono de FontAwesome dentro del texto adicional de la información del contenedor. */
+.container .info span .fa {
+  color: #EF3B3A; /* Color rojo para el icono */
+}
+
+/* Estilizamos el cuerpo de la página con una imagen de fondo, asegurando que cubra toda la pantalla y no se repita. */
+body {
+  background-image: url('4d155c6f7e5b1c6942059703c403ecaf.jpg'); /* URL de la imagen de fondo */
+  background-size: cover; /* La imagen de fondo cubre toda la pantalla */
+  background-repeat: no-repeat; /* La imagen de fondo no se repite */
+  font-family: "Roboto", sans-serif; /* Fuente 'Roboto' para todo el texto de la página */
+  -webkit-font-smoothing: antialiased; /* Suavizado de fuente para navegadores WebKit */
+  -moz-osx-font-smoothing: grayscale; /* Suavizado de fuente para Firefox en OS X */
+}

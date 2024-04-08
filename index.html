@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Define la codificación de caracteres para el documento HTML -->
+        <meta charset="UTF-8">
+        <!-- Título de la página, que se muestra en la pestaña del navegador -->
+        <title>Página de Registro e Inicio de Sesión</title>
+        <!-- Enlace al archivo CSS para estilizar la página, utilizando la función url_for de Flask para referenciar archivos estáticos -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+        <!-- Inclusión de jQuery, una biblioteca de JavaScript para simplificar la manipulación del DOM, eventos y animaciones -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Inclusión de SweetAlert2, una biblioteca para crear alertas y notificaciones más estéticas y funcionales que las nativas de JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> 
+     </head>     
+<body>
+    <div class="login-page">
+        <!-- Contenedor principal de la página de inicio de sesión y registro -->
+        <div class="form">
+            <!-- Formulario de registro, inicialmente oculto -->
+            <form class="register-form" style="display:none;" id="register-form">
+                <!-- Campo de texto para el nombre de usuario, requerido para enviar el formulario -->
+                <input type="text" id="name" placeholder="Nombre de Usuario" required/>
+                <!-- Campo de contraseña para la contraseña, requerido para enviar el formulario -->
+                <input type="password" id="password" placeholder="Contraseña" required/>
+                <!-- Botón para crear una cuenta nueva -->
+                <button type="button" id="create_account_btn">Crear</button>
+                <!-- Botón para generar una contraseña segura -->
+                <button type="button" id="generate_password_btn">Generar Contraseña Segura</button>
+                <!-- Mensaje con enlace para cambiar al formulario de inicio de sesión si el usuario ya está registrado -->
+                <p class="message">¿Ya estas registrado? <a href="#" onclick="showLoginForm()">Sign In</a></p>
+            </form>
+            <!-- Formulario de inicio de sesión, visible por defecto -->
+            <form class="login-form" id="login-form">
+                <!-- Campo de texto para el nombre de usuario, requerido para enviar el formulario -->
+                <input type="text" name="username" placeholder="Nombre de Usuario" required/>
+                <!-- Campo de contraseña para la contraseña, requerido para enviar el formulario -->
+                <input type="password" name="password" placeholder="Contraseña" required/>
+                <!-- Botón para iniciar sesión -->
+                <button type="submit">iniciar</button>
+                <!-- Mensaje con enlace para cambiar al formulario de registro si el usuario no está registrado -->
+                <p class="message">¿No estas registrado?<a href="#" onclick="showRegisterForm()">Create tu cuenta</a></p>
+            </form>
+        </div>
+    </div>    
+    <script>
+// Función para mostrar notificaciones con SweetAlert
+function showNotification(message, type) {
+    Swal.fire({
+        icon: type, // El ícono de la notificación, que puede ser 'error' o 'success'
+        title: type === 'error' ? 'Error' : 'Success', // El título de la notificación, basado en el tipo
+        text: message, // El mensaje de la notificación
+        timer: 3000 // El tiempo en milisegundos que la notificación se mostrará antes de desaparecer
+    });
+}
+
+// Función para mostrar el formulario de registro
+function showRegisterForm() {
+    $('.login-form').hide(); // Oculta el formulario de inicio de sesión
+    $('.register-form').show(); // Muestra el formulario de registro
+}
+
+// Función para mostrar el formulario de inicio de sesión
+function showLoginForm() {
+    $('.register-form').hide(); // Oculta el formulario de registro
+    $('.login-form').show(); // Muestra el formulario de inicio de sesión
+}
+
+// Evento click para el botón de generar contraseña segura
+$('#generate_password_btn').click(function() {
+    $.post('/generate-password', function(data) {
+        var passwordField = $('#password');
+        passwordField.val(data.password); // Asigna la contraseña generada al campo de contraseña
+        passwordField.attr('type', 'text'); // Cambia el tipo de input para mostrar la contraseña
+        setTimeout(function() {
+            passwordField.attr('type', 'password'); // Vuelve a ocultar la contraseña después de 5 segundos
+        }, 5000);
+        showNotification('Contraseña generada con éxito', 'success'); // Muestra una notificación de éxito
+    });
+});
+
+// Evento click para el botón de crear cuenta
+$('#create_account_btn').click(function() {
+    var name = $('#name').val(); // Obtiene el nombre de usuario del campo correspondiente
+    var password = $('#password').val(); // Obtiene la contraseña del campo correspondiente
+    $.post('/register', {name: name, password: password}, function(data) {
+        if(data.message) {
+            showNotification(data.message, 'success'); // Muestra una notificación de éxito
+            showLoginForm(); // Cambia al formulario de inicio de sesión
+        } else if(data.error) {
+            showNotification(data.error, 'error'); // Muestra una notificación de error
+        }
+    }).fail(function(jqXHR) {
+        // Manejo de errores de la solicitud AJAX
+        var errorResponse = JSON.parse(jqXHR.responseText);
+        showNotification(errorResponse.error, 'error'); // Muestra una notificación de error
+    });
+});
+
+// Evento submit para el formulario de inicio de sesión
+$('#login-form').submit(function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe de la manera predeterminada
+    var username = $('input[name="username"]').val(); // Obtiene el nombre de usuario del campo correspondiente
+    var password = $('input[name="password"]').val(); // Obtiene la contraseña del campo correspondiente
+    $.ajax({
+        url: '/login', // La URL a la que se enviará la solicitud
+        type: 'POST', // El método HTTP para la solicitud
+        data: {username: username, password: password}, // Los datos que se enviarán al servidor
+        dataType: 'json', // El tipo de datos que se espera de la respuesta
+        success: function(data) {
+            if(data.message) {
+                showNotification(data.message, 'success'); // Muestra una notificación de éxito si hay un mensaje
+            } else if(data.error) {
+                showNotification(data.error, 'error'); // Muestra una notificación de error si hay un error
+            }
+        },
+        error: function(xhr, status, error) {
+            // Manejo de errores de la solicitud AJAX
+            showNotification('Error al procesar la solicitud: ' + error, 'error'); // Muestra una notificación de error
+        }
+    });
+});
+    </script>
+</body>
+</html>
+
